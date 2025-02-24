@@ -25,7 +25,6 @@ int main() {
     else {
       int i = 0;
       while (input[i]) {
-	cout << i << endl;
 	if (input[i] == ' ') {
 	  i++;
 	}
@@ -36,6 +35,7 @@ int main() {
 	}
       }
       cout << "finished" << endl;
+      printQueue(stackHead);
       while (stackHead != NULL) {
 	Node* add = new Node(stackHead->getValue());
 	cout << "adding " << add->getValue() << endl;
@@ -85,6 +85,7 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
   Node* add = new Node(in);
   if (isdigit(in)) {
     enqueue(queueHead, add);
+    cout << "added to queue " << add->getValue() << endl;
     return;
   }
   else {
@@ -95,9 +96,7 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
       return;
     }
     if (in == ')') {
-      push(stackHead, add);
-      stackHead = pop(stackHead);
-      while (stackHead->getValue() != '(') {
+        while (stackHead->getValue() != '(') {
 	Node* add = new Node(stackHead->getValue());
 	enqueue(queueHead, add);
 	stackHead = pop(stackHead);
@@ -156,6 +155,7 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
 	  }
 	}
       }
+      cout << "here 6" << endl;
       push(stackHead, add);
     }
   }
@@ -163,18 +163,10 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
 
 void printQueue(Node* queueHead) {
   Node* curr = queueHead;
-  //while (curr != NULL) {
+  while (curr != NULL) {
     cout << curr->getValue();
     curr = curr->getNext();
-        cout << curr->getValue();
-    curr = curr->getNext();
-    cout << curr->getValue();
-    curr = curr->getNext();
-    cout << curr->getValue();
-    curr = curr->getNext();
-    cout << curr->getValue();
-    curr = curr->getNext();
-
-    //}
-  cout << '\n';
+  }
+  cout << endl;
 }
+
