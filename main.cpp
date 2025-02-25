@@ -16,6 +16,7 @@ int main() {
   char input[30];
   Node* stackHead = NULL;
   Node* queueHead = NULL;
+  memset(input, 0, sizeof(input));
   do {
     cout << "Please enter an expression! Type 'QUIT' to quit." << endl;
     cin.getline(input, 30);
@@ -24,8 +25,8 @@ int main() {
     }
     else {
       int i = 0;
-      while (input[i]) {
-	if (input[i] == ' ') {
+      while (input[i] != '\0') {
+	if (isspace(input[i])) {
 	  i++;
 	}
 	else {
@@ -44,6 +45,7 @@ int main() {
       }
       cout << "printing..." << endl;
       printQueue(queueHead);
+      queueHead = NULL;
     }
   } while (quit == false);
   return 0;
@@ -89,35 +91,32 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
     return;
   }
   else {
-    if (stackHead == NULL || in == '(' || stackHead->getValue() == '(' && stackHead->getValue() != ')') {
-      cout << "here" << endl;
+    if (in == '(') {
       push(stackHead, add);
-      cout << stackHead->getValue() << endl;
       return;
     }
     if (in == ')') {
-        while (stackHead->getValue() != '(') {
-	Node* add = new Node(stackHead->getValue());
-	enqueue(queueHead, add);
+        while (stackHead != NULL && stackHead->getValue() != '(') {
+	Node* queueAdd = new Node(stackHead->getValue());
+	enqueue(queueHead, queueAdd);
 	stackHead = pop(stackHead);
       }
+	if (stackHead != NULL) {
       stackHead = pop(stackHead);
+      return;
+	}
+	else {
+	  return;
+	}
+    }
+    if (stackHead == NULL) {
+      push(stackHead, add);
       return;
     }
     else {
-      int preStack;
-      int preIn;
+      int preStack = 0;
+      int preIn = 0;
       cout << "here 2" << endl;
-      if (stackHead->getValue() == '+' || stackHead->getValue() == '-') {
-	preStack = 1;
-      }
-      else if (stackHead->getValue() == '*' || stackHead->getValue() == '/') {
-	preStack = 2;
-      }
-      else if (stackHead->getValue() == '^') {
-	preStack = 3;
-      }
-      cout << "prestack is " << preStack << endl;
       if (in == '+' || in == '-') {
         preIn = 1;
       }
@@ -128,19 +127,8 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
         preIn = 3;
       }
       cout << "prein is " << preIn << endl;
-      if (preIn > preStack) {
-	push(stackHead, add);
-	return;
-      }
-      else {
-	while (stackHead != NULL) {
-	  if (preIn <= preStack && stackHead->getValue() != '(') {
-	  cout << "here 3" << endl;
-	  Node* add2 = new Node(stackHead->getValue());
-	  enqueue(queueHead, add);
-	  stackHead = pop(stackHead);
-	  cout << "here 4" << endl;
-	  if (stackHead != NULL) {
+	while (stackHead != NULL && stackHead->getValue() != '(') {
+	  cout << "here 2" << endl;
 	  if (stackHead->getValue() == '+' || stackHead->getValue() == '-') {
 	    preStack = 1;
 	  }
@@ -150,15 +138,19 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
 	  else if (stackHead->getValue() == '^') {
 	    preStack = 3;
 	  }
-	  cout << "here 5" << endl;
+	  if (preStack >= preIn) {
+	    Node* temp = new Node(stackHead->getValue());
+	    enqueue(queueHead, temp);
+	    stackHead = pop(stackHead);
 	  }
+	  else {
+	    break;
 	  }
 	}
-      }
+    }      
       cout << "here 6" << endl;
       push(stackHead, add);
     }
-  }
 }
 
 void printQueue(Node* queueHead) {
