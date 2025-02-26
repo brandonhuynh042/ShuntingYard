@@ -31,6 +31,9 @@ int main() {
 	}
 	else {
 	  cout << "sending in " << input[i] << endl;
+	  cout << "the stack is: ";
+	  printQueue(stackHead);
+	  cout << endl;
 	  parseInput(input[i], stackHead, queueHead);
 	  i++;
 	}
@@ -45,7 +48,9 @@ int main() {
       }
       cout << "printing..." << endl;
       printQueue(queueHead);
-      queueHead = NULL;
+      while (queueHead != NULL) {
+	pop(queueHead);
+      }
     }
   } while (quit == false);
   return 0;
@@ -116,7 +121,6 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
     else {
       int preStack = 0;
       int preIn = 0;
-      cout << "here 2" << endl;
       if (in == '+' || in == '-') {
         preIn = 1;
       }
@@ -128,7 +132,6 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
       }
       cout << "prein is " << preIn << endl;
 	while (stackHead != NULL && stackHead->getValue() != '(') {
-	  cout << "here 2" << endl;
 	  if (stackHead->getValue() == '+' || stackHead->getValue() == '-') {
 	    preStack = 1;
 	  }
@@ -148,7 +151,6 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead) {
 	  }
 	}
     }      
-      cout << "here 6" << endl;
       push(stackHead, add);
     }
 }
