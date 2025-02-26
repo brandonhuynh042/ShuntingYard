@@ -17,6 +17,7 @@ void parseInput(char in, Node* &stackHead, Node* &queueHead);
 void treeParse(char input, NodeT* &tStackHead);
 void printTree(BTree* input);
 void printTreeBackwards(BTree* input);
+void infix(BTree* input, int precedence);
 
 int main() {
   bool quit = false;
@@ -84,6 +85,18 @@ int main() {
           curr = curr->getNext();
         }
       cout << endl;
+      }
+      else if (uInput == 3) {
+	cout << "infix: " << endl;
+	NodeT* curr = tStackHead;
+	while (curr != NULL) {
+	  infix(curr->getValue(), 0);
+	  curr = curr->getNext();
+	}
+	cout << endl;
+      }
+      while (tStackHead != NULL) {
+	popT(tStackHead);
       }
     }
   } while (quit == false);
@@ -279,4 +292,36 @@ void printTreeBackwards(BTree* input) {
 }
 
 
-
+void infix(BTree* input, int precedence) {
+  if (input == NULL) {
+    return;
+  }
+  if (isdigit(input->getValue())) {
+    cout << input->getValue() << " ";
+    return;
+  }
+  else {
+    int childP = 0;
+    if (input->getValue() == '+' || input->getValue() == '-') {
+        childP = 1;
+      }
+    else if (input->getValue() == '*' || input->getValue() == '/') {
+        childP = 2;
+      }
+    else if (input->getValue() == '^') {
+        childP = 3;
+      }
+    if (precedence != 0 && childP < precedence) {
+      cout << " ( ";
+      infix(input->getLeft(), childP);
+      cout << input->getValue() << " ";
+      infix(input->getRight(), childP);
+      cout << " ) ";
+    }
+    else {
+      infix(input->getLeft(), childP);
+      cout << input->getValue() << " ";
+      infix(input->getRight(), childP);
+    }
+  }
+}
