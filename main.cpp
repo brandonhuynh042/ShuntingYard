@@ -20,7 +20,8 @@ void printTreeBackwards(BTree* input);
 void infix(BTree* input, int precedence);
 
 
-/* This program takes in an exp
+/* This program takes in an in-fix expression, and converts it to prefix, postfix, or infix based on the user using an expression tree.
+   Brandon Huynh, last edited 2/28/2025*/
 int main() {
   bool quit = false;
   char input[30];
